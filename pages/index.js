@@ -6,6 +6,32 @@ import { getArea } from "../lib/areas";
 import ReactPlayer from "react-player";
 import socket from "../lib/socket";
 
+function areaEffects({ area, dispatch }) {
+  const effects = area.effects || [];
+  const intervals = effects.map((effect) => {
+    return setInterval(() => {
+      const fn = (s) => {
+        return { ...s, character: effect.fn(s.character) };
+      };
+      dispatch(fn);
+    }, effect.interval);
+  });
+  return () => {
+    intervals.forEach(clearInterval);
+  };
+}
+
+function setupSocket({ socket, currentArea, character }) {
+  socket.on("message", (data) => console.log(data));
+  socket.on("character", (data) => console.log(data));
+  socket.emit("join", { room: currentArea, character });
+  return () => {
+    socket.emit("leave", { room: currentArea, character });
+    socket.removeAllListeners("character");
+    socket.removeAllListeners("message");
+  };
+}
+
 export default function Home() {
   const { state, dispatch } = useContext(store);
   const { currentArea, character } = state;
@@ -14,38 +40,20 @@ export default function Home() {
   const stream = null;
 
   useEffect(() => {
-    const effects = area.effects || [];
-    const intervals = effects.map((effect) => {
-      return setInterval(() => {
-        const fn = (s) => {
-          return { ...s, character: effect.fn(s.character) };
-        };
-        dispatch(fn);
-      }, effect.interval);
-    });
-    return () => {
-      intervals.forEach(clearInterval);
-    };
+    return areaEffects({ area, dispatch });
   }, [currentArea]);
 
   useEffect(() => {
-    window.localStorage.setItem("state", JSON.stringify(state));
+    return setupSocket({ socket, currentArea, character });
+  }, [currentArea]);
+
+  useEffect(() => {
+    dispatch({ type: "persist_state" })
   });
 
   useEffect(() => {
     socket.emit("character", character);
   }, [character]);
-
-  useEffect(() => {
-    socket.on("message", (data) => console.log(data));
-    socket.on("character", (data) => console.log(data));
-    socket.emit("join", { room: currentArea, character });
-    return () => {
-      socket.emit("leave", { room: currentArea, character });
-      socket.removeAllListeners("character");
-      socket.removeAllListeners("message");
-    }
-  }, [currentArea]);
 
   return (
     <Layout>

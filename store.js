@@ -25,16 +25,19 @@ const { Provider } = store;
 const StateProvider = ({ children }) => {
   const [state, dispatch] = useReducer((state, action) => {
     if (action instanceof Function) {
-      return action(state)
+      return action(state);
     } else {
-    switch (action.type) {
-      case "set_current_area":
-        return { ...state, currentArea: action.value };
-      case "set_character":
-        return { ...state, character: action.value };
-      default:
-        throw new Error();
-    }
+      switch (action.type) {
+        case "set_current_area":
+          return { ...state, currentArea: action.value };
+        case "set_character":
+          return { ...state, character: action.value };
+        case "persist_state":
+          window.localStorage.setItem("state", JSON.stringify(state));
+          return state;
+        default:
+          throw new Error();
+      }
     }
   }, initialState);
 

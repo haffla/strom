@@ -2,6 +2,7 @@ import React, { createContext, useReducer } from "react";
 
 const defaultState = {
   currentArea: "entry",
+  username: "jacke"
 };
 
 function getInitialState() {

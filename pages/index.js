@@ -7,18 +7,24 @@ import ReactPlayer from "react-player";
 import io from "socket.io-client";
 
 export default function Home() {
+  let socket = null;
   const { state, dispatch } = useContext(store);
+
   useEffect(() => {
     window.localStorage.setItem("state", JSON.stringify(state));
   });
 
   useEffect(() => {
-    const socket = io();
-    socket.on("now", (data) => console.log(data));
-  }, []);
+    socket = io();
+    socket.on("message", (data) => console.log(data));
+    socket.emit("character", { username: state.username })
+    socket.emit("join", { room: state.currentArea, username: state.username });
+    return () => socket.emit("leave", { room: state.currentArea, username: state.username })
+  }, [state.currentArea]);
 
   const area = getArea(state.currentArea);
-  const stream = area.streams ? area.streams[0].url : "";
+  // const stream = area.streams ? area.streams[0].url : null;
+  const stream = null;
 
   return (
     <Layout>

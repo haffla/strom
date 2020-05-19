@@ -8,9 +8,10 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+// get all characters present in a room
 function getCharacters({ io, room }) {
-  const clients = io.sockets.adapter.rooms[room]
-  const sockets = clients ? clients.sockets : []
+  const clients = io.sockets.adapter.rooms[room];
+  const sockets = clients ? clients.sockets : [];
   return Object.keys(sockets).map((clientId) => {
     return io.sockets.connected[clientId].character;
   });
@@ -32,13 +33,19 @@ app.prepare().then(() => {
     socket.on("disconnect", () => {
       console.log(socket.id, "disconnected");
     });
+
     socket.on("character", (character) => {
+      // set the character on the socket
+      // clients will send their character whenever it changes
       socket.character = character;
-      const rooms = Object.keys(socket.rooms).filter(r => r !== socket.id)
+      const rooms = Object.keys(socket.rooms).filter((r) => r !== socket.id);
       if (rooms.length > 0) {
-        socket.in(rooms[0]).emit("character", character)
+        // currently there shouldn't ever be more than one room
+        // broadcast to everyone (except sender)
+        socket.in(rooms[0]).emit("character", character);
       }
     });
+
     socket.on("join", ({ room, character }) => {
       socket.join(room, () => {
         const characters = getCharacters({ io, room });
@@ -47,6 +54,7 @@ app.prepare().then(() => {
           .send({ text: `${character.username} joined ${room}!`, characters });
       });
     });
+
     socket.on("leave", ({ room, character }) => {
       socket.leave(room, () => {
         const characters = getCharacters({ io, room });

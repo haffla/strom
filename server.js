@@ -25,7 +25,6 @@ const requestListener = (req, res) => {
 
 app.prepare().then(() => {
   const port = parseInt(process.env.PORT || "3000", 10);
-
   const server = http.createServer(requestListener);
 
   io = socketIO(server);
@@ -35,21 +34,25 @@ app.prepare().then(() => {
     });
     socket.on("character", (character) => {
       socket.character = character;
+      const rooms = Object.keys(socket.rooms).filter(r => r !== socket.id)
+      if (rooms.length > 0) {
+        socket.in(rooms[0]).emit("character", character)
+      }
     });
-    socket.on("join", ({ room, username }) => {
+    socket.on("join", ({ room, character }) => {
       socket.join(room, () => {
         const characters = getCharacters({ io, room });
-        io.sockets
+        socket
           .in(room)
-          .send({ text: `${username} joined ${room}!`, characters });
+          .send({ text: `${character.username} joined ${room}!`, characters });
       });
     });
-    socket.on("leave", ({ room, username }) => {
+    socket.on("leave", ({ room, character }) => {
       socket.leave(room, () => {
         const characters = getCharacters({ io, room });
-        io.sockets
+        socket
           .in(room)
-          .send({ text: `${username} left ${room}!`, characters });
+          .send({ text: `${character.username} left ${room}!`, characters });
       });
     });
   });

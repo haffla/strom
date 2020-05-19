@@ -2,7 +2,10 @@ import React, { createContext, useReducer } from "react";
 
 const defaultState = {
   currentArea: "entry",
-  username: "jacke"
+  character: {
+    username: "jacke",
+    stamina: 100,
+  },
 };
 
 function getInitialState() {
@@ -21,11 +24,17 @@ const { Provider } = store;
 
 const StateProvider = ({ children }) => {
   const [state, dispatch] = useReducer((state, action) => {
+    if (action instanceof Function) {
+      return action(state)
+    } else {
     switch (action.type) {
       case "set_current_area":
         return { ...state, currentArea: action.value };
+      case "set_character":
+        return { ...state, character: action.value };
       default:
         throw new Error();
+    }
     }
   }, initialState);
 

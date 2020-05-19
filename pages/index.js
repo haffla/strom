@@ -4,31 +4,54 @@ import React, { useContext } from "react";
 import { store } from "../store";
 import { getArea } from "../lib/areas";
 import ReactPlayer from "react-player";
-import io from "socket.io-client";
+import socket from "../lib/socket";
 
 export default function Home() {
-  let socket = null;
   const { state, dispatch } = useContext(store);
+  const { currentArea, character } = state;
+  const area = getArea(currentArea);
+  // const stream = area.streams ? area.streams[0].url : null;
+  const stream = null;
+
+  useEffect(() => {
+    const effects = area.effects || [];
+    const intervals = effects.map((effect) => {
+      return setInterval(() => {
+        const fn = (s) => {
+          return { ...s, character: effect.fn(s.character) };
+        };
+        dispatch(fn);
+      }, effect.interval);
+    });
+    return () => {
+      intervals.forEach(clearInterval);
+    };
+  }, [currentArea]);
 
   useEffect(() => {
     window.localStorage.setItem("state", JSON.stringify(state));
   });
 
   useEffect(() => {
-    socket = io();
-    socket.on("message", (data) => console.log(data));
-    socket.emit("character", { username: state.username })
-    socket.emit("join", { room: state.currentArea, username: state.username });
-    return () => socket.emit("leave", { room: state.currentArea, username: state.username })
-  }, [state.currentArea]);
+    socket.emit("character", character);
+  }, [character]);
 
-  const area = getArea(state.currentArea);
-  // const stream = area.streams ? area.streams[0].url : null;
-  const stream = null;
+  useEffect(() => {
+    socket.on("message", (data) => console.log(data));
+    socket.on("character", (data) => console.log(data));
+    socket.emit("join", { room: currentArea, character });
+    return () => {
+      socket.emit("leave", { room: currentArea, character });
+      socket.removeAllListeners("character");
+      socket.removeAllListeners("message");
+    }
+  }, [currentArea]);
 
   return (
     <Layout>
-      <h1>{area.name}</h1>
+      <h1>
+        {area.name} {character.stamina} {character.username}
+      </h1>
       <div id="twitch"></div>
       {area.connectsTo.map((c) => (
         <button

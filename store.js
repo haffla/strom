@@ -33,7 +33,7 @@ const StateProvider = ({ children }) => {
         case "set_character":
           return { ...state, character: action.value };
         case "persist_state":
-          window.localStorage.setItem("state", JSON.stringify(state));
+          // window.localStorage.setItem("state", JSON.stringify(state));
           return state;
         default:
           throw new Error();

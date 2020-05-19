@@ -1,8 +1,9 @@
 import Head from "next/head";
+import classNames from "classnames";
 
-export default function Layout({ children }) {
+export default function Layout({ children, containerClasses }) {
   return (
-    <div className="container">
+    <div className={classNames("container", containerClasses)}>
       <Head>
         <title>Strom</title>
         <link rel="icon" href="/favicon.ico" />
@@ -20,6 +21,14 @@ export default function Layout({ children }) {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+        }
+
+        .container.dark {
+          background-color: gray;
+        }
+
+        .container.light {
+          background-color: yellow;
         }
 
         main {

@@ -10,10 +10,7 @@ function areaEffects({ area, dispatch }) {
   const effects = area.effects || [];
   const intervals = effects.map((effect) => {
     return setInterval(() => {
-      const fn = (s) => {
-        return { ...s, character: effect.fn(s.character) };
-      };
-      dispatch(fn);
+      dispatch((state) => effect.fn(state));
     }, effect.interval);
   });
   return () => {
@@ -39,6 +36,8 @@ export default function Home() {
   // const stream = area.streams ? area.streams[0].url : null;
   const stream = null;
 
+  const cssClasses = area.cssClassesFn ? area.cssClassesFn(state) : {};
+
   useEffect(() => {
     return areaEffects({ area, dispatch });
   }, [currentArea]);
@@ -48,7 +47,7 @@ export default function Home() {
   }, [currentArea]);
 
   useEffect(() => {
-    dispatch({ type: "persist_state" })
+    dispatch({ type: "persist_state" });
   });
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export default function Home() {
   }, [character]);
 
   return (
-    <Layout>
+    <Layout containerClasses={cssClasses.container}>
       <h1>
         {area.name} {character.stamina} {character.username}
       </h1>

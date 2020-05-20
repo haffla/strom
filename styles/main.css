@@ -1,0 +1,279 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ==========================================================================
+   Own stuff: globals
+   ========================================================================== */
+
+.someclass {
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+}
+
+body {
+  filter: none;
+}
+
+header {
+  position: absolute;
+}
+
+.contentSection {
+  background-color: black;
+  width: calc(75vw);
+  height: calc(80vh);
+  float: left;
+  background-size: cover;
+}
+
+#contentSectionDiv {
+  height: calc(20vh);
+  width: calc(75vw);
+  background-color: #00ff00;
+  position: absolute;
+  bottom: 0px;
+}
+
+#contentSectionDivRoom1 {
+  height: calc(20vh);
+  width: calc(75vw);
+  background-color: #ffff00;
+  position: absolute;
+  bottom: 0px;
+}
+
+#contentSectionDivRoom2 {
+  height: calc(20vh);
+  width: calc(75vw);
+  background-color: #000000;
+  color: #ffffff;
+  position: absolute;
+  bottom: 0px;
+}
+
+#contentSectionDivRoom3 {
+  height: calc(20vh);
+  width: calc(75vw);
+  background-color: #000000;
+  color: #ffffff;
+  position: absolute;
+  bottom: 0px;
+}
+
+#mainText {
+  margin: 20px;
+  height: 50%;
+  overflow-x: hidden;
+}
+
+.mainButton {
+  height: 30px;
+  width: 25%;
+  background-color: #0088ff;
+}
+
+#characterSection {
+  position: absolute;
+  right: 0;
+  background-color: red;
+  width: 25vw;
+  height: calc(10vh);
+}
+
+#character {
+  float: left;
+  height: 36px;
+  padding: 10px;
+}
+
+#characterImage {
+  height: 100%;
+}
+
+#characterStatsImage {
+  padding: 20px 20px 20px 50px;
+}
+
+#chatSection {
+  position: absolute;
+  top: calc(10vh);
+  right: 0;
+  width: calc(25vw);
+  height: calc(90vh);
+  background-color: #00ff00;
+}
+
+/*refactor!!! room definitions*/
+
+#chatSectionRoom1 {
+  position: absolute;
+  top: calc(10vh);
+  right: 0;
+  width: calc(25vw);
+  height: calc(90vh);
+  background-color: #ffff00;
+}
+
+#chatSectionRoom2 {
+  position: absolute;
+  top: calc(10vh);
+  right: 0;
+  width: calc(25vw);
+  height: calc(90vh);
+  background-color: #000000;
+  color: #ffffff;
+}
+
+#chatSectionRoom3 {
+  position: absolute;
+  top: calc(10vh);
+  right: 0;
+  width: calc(25vw);
+  height: calc(90vh);
+  background-color: #000000;
+  color: #ffffff;
+}
+#chatDescriptionText {
+  margin: 20px;
+}
+
+#mainInput {
+  margin-left: 20px;
+  padding: 20px;
+  width: 80%;
+  height: 70%;
+}
+
+#chatButtons {
+  position: fixed;
+  margin: 20px 0px 0px 20px;
+}

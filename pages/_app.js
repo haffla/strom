@@ -1,4 +1,5 @@
-import "../styles/global.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "../styles/main.css";
 import { useEffect } from "react";
 import { StateProvider } from "../store";
 

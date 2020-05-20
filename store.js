@@ -6,6 +6,7 @@ const defaultState = {
     username: "jacke",
     stamina: 100,
   },
+  messages: [],
 };
 
 function getInitialState() {
@@ -35,6 +36,8 @@ const StateProvider = ({ children }) => {
         case "persist_state":
           // window.localStorage.setItem("state", JSON.stringify(state));
           return state;
+        case "add_message":
+          return { ...state, messages: [action.value, ...state.messages] }
         default:
           throw new Error();
       }

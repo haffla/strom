@@ -19,7 +19,9 @@ function areaEffects({ area, dispatch }) {
 }
 
 function setupSocket({ socket, currentArea, character }) {
-  socket.on("message", (data) => console.log(data));
+  socket.on("message", () =>
+    dispatch({ type: "add_message", value: data.text })
+  );
   socket.on("character", (data) => console.log(data));
   socket.emit("join", { room: currentArea, character });
   return () => {
@@ -35,8 +37,6 @@ export default function Home() {
   const area = getArea(currentArea);
   // const stream = area.streams ? area.streams[0].url : null;
   const stream = null;
-
-  const cssClasses = area.cssClassesFn ? area.cssClassesFn(state) : {};
 
   useEffect(() => {
     return areaEffects({ area, dispatch });
@@ -54,21 +54,18 @@ export default function Home() {
     socket.emit("character", character);
   }, [character]);
 
+  const mainContent = area.mainContent
+    ? area.mainContent({ state, dispatch })
+    : null;
+
   return (
-    <Layout containerClasses={cssClasses.container}>
-      <h1>
-        {area.name} {character.stamina} {character.username}
-      </h1>
-      <div id="twitch"></div>
-      {area.connectsTo.map((c) => (
-        <button
-          key={c.id}
-          onClick={() => dispatch({ type: "set_current_area", value: c.id })}
-        >
-          {getArea(c.id).name}
-        </button>
-      ))}
-      {stream && <ReactPlayer controls url={stream} playing />}
+    <Layout>
+      {mainContent}
+      {/* <h1> */}
+      {/*   {area.name} {character.stamina} {character.username} */}
+      {/* </h1> */}
+      {/* <div id="twitch"></div> */}
+      {/* {stream && <ReactPlayer controls url={stream} playing />} */}
     </Layout>
   );
 }

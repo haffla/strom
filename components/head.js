@@ -3,7 +3,7 @@ import Head from "next/head";
 export default function DefaultHead({ title }) {
   return (
     <Head>
-      <meta charset="utf-8" />
+      <meta charSet="utf-8" />
       <title>PLANET BABEL | {title}</title>
       <meta name="description" content="PLANET BABEL" />
       <meta
@@ -20,9 +20,9 @@ export default function DefaultHead({ title }) {
       <link rel="author" href="diskoBabel e.V." />
       <link rel="publisher" href="diskoBabel e.V." />
 
-      <meta itemprop="name" content="" />
-      <meta itemprop="description" content="" />
-      <meta itemprop="image" content="" />
+      <meta itemProp="name" content="" />
+      <meta itemProp="description" content="" />
+      <meta itemProp="image" content="" />
 
       <meta name="twitter:card" content="" />
       <meta name="twitter:site" content="" />

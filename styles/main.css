@@ -220,60 +220,30 @@ header {
 }
 
 #characterStatsImage {
-  padding: 20px 20px 20px 50px;
+  /* padding: 20px 20px 20px 50px; */
+  padding: 20px 0;
 }
 
 #chatSection {
   position: absolute;
-  top: calc(10vh);
+  top: calc(20vh);
   right: 0;
   width: calc(25vw);
-  height: calc(90vh);
-  background-color: #00ff00;
+  height: calc(80vh);
 }
 
-/*refactor!!! room definitions*/
-
-#chatSectionRoom1 {
-  position: absolute;
-  top: calc(10vh);
-  right: 0;
-  width: calc(25vw);
-  height: calc(90vh);
-  background-color: #ffff00;
+#chatContainer {
+  padding: 5px 10px;
 }
 
-#chatSectionRoom2 {
-  position: absolute;
-  top: calc(10vh);
-  right: 0;
-  width: calc(25vw);
-  height: calc(90vh);
-  background-color: #000000;
-  color: #ffffff;
-}
-
-#chatSectionRoom3 {
-  position: absolute;
-  top: calc(10vh);
-  right: 0;
-  width: calc(25vw);
-  height: calc(90vh);
-  background-color: #000000;
-  color: #ffffff;
-}
 #chatDescriptionText {
   margin: 20px;
 }
 
 #mainInput {
-  margin-left: 20px;
-  padding: 20px;
-  width: 80%;
-  height: 70%;
+  width: 100%;
 }
 
 #chatButtons {
-  position: fixed;
-  margin: 20px 0px 0px 20px;
+  margin-top: 20px;
 }

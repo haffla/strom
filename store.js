@@ -37,7 +37,9 @@ const StateProvider = ({ children }) => {
           // window.localStorage.setItem("state", JSON.stringify(state));
           return state;
         case "add_message":
-          return { ...state, messages: [action.value, ...state.messages] }
+          return { ...state, messages: [...state.messages, action.value] }
+        case "empty_messages":
+          return { ...state, messages: [] }
         default:
           throw new Error();
       }

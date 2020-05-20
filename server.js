@@ -1,9 +1,7 @@
 const url = require("url");
 const next = require("next");
-
 const socketIO = require("socket.io");
 const http = require("http");
-
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -34,6 +32,10 @@ app.prepare().then(() => {
       console.log(socket.id, "disconnected");
     });
 
+    socket.on("message", ({id, text, room}) => {
+      socket.in(room).emit("message", { id, text })
+    });
+
     socket.on("character", (character) => {
       // set the character on the socket
       // clients will send their character whenever it changes
@@ -51,7 +53,10 @@ app.prepare().then(() => {
         const characters = getCharacters({ io, room });
         socket
           .in(room)
-          .send({ text: `${character.username} joined ${room}!`, characters });
+          .emit("join", {
+            text: `${character.username} joined ${room}!`,
+            characters,
+          });
       });
     });
 
@@ -60,7 +65,10 @@ app.prepare().then(() => {
         const characters = getCharacters({ io, room });
         socket
           .in(room)
-          .send({ text: `${character.username} left ${room}!`, characters });
+          .emit("leave", {
+            text: `${character.username} left ${room}!`,
+            characters,
+          });
       });
     });
   });

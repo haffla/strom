@@ -1,25 +1,34 @@
 import classNames from "classnames";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { store } from "../store";
 import { getArea } from "../lib/areas";
 import DefaultHead from "./head";
+import { v4 as uuidv4 } from "uuid";
+import socket from "../lib/socket";
 
 export default function Layout({ children }) {
-  const { state } = useContext(store);
+  const [inputText, setInputText] = useState("");
+  const { state, dispatch } = useContext(store);
   const { currentArea } = state;
   const area = getArea(currentArea);
   const cssClasses = area.cssClassesFn ? area.cssClassesFn(state) : {};
-  const img = area.img;
+  const areaStyles = area.cssStylesFn ? area.cssStylesFn(state) : {};
+  const onChatSubmit = (e) => {
+    e.preventDefault();
+    const id = uuidv4();
+    dispatch({ type: "add_message", value: { text: inputText, id } });
+    socket.emit("message", { text: inputText, id, room: currentArea });
+    setInputText("");
+  };
 
   return (
     <div className={classNames(cssClasses.container)}>
       <DefaultHead title={area.name} />
       <main>
-        <section
-          className="contentSection"
-          style={{ backgroundImage: `url(/img/${img})` }}
-        >
-          <div id="contentSectionDiv">{children}</div>
+        <section className="contentSection" style={areaStyles.contentSection}>
+          <div id="contentSectionDiv" style={areaStyles.contentSectionDiv}>
+            {children}
+          </div>
         </section>
 
         <section id="characterSection">
@@ -32,11 +41,24 @@ export default function Layout({ children }) {
           </div>
         </section>
 
-        <section id="chatSection">
+        <section id="chatSection" style={areaStyles.chatSection}>
           <p id="chatDescriptionText">{area.name}</p>
-          <input id="mainInput" />
-          <div id="chatButtons">
-            <button>Senden</button>
+          <div id="chatContainer">
+            {state.messages.map((msg) => (
+              <div key={msg.id} className="chat-message">
+                {msg.text}
+              </div>
+            ))}
+            <form onSubmit={onChatSubmit}>
+              <input
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                id="mainInput"
+              />
+              <div id="chatButtons">
+                <button type="submit">Senden</button>
+              </div>
+            </form>
           </div>
         </section>
       </main>

@@ -18,13 +18,16 @@ function areaEffects({ area, dispatch }) {
   };
 }
 
-function setupSocket({ socket, currentArea, character }) {
-  socket.on("message", () =>
-    dispatch({ type: "add_message", value: data.text })
-  );
-  socket.on("character", (data) => console.log(data));
+function setupSocket({ socket, currentArea, character, dispatch }) {
+  socket.on("message", (data) => {
+    console.log("receiving message");
+    dispatch({ type: "add_message", value: data });
+  });
+  socket.on("character", (data) => console.log(data)); // todo the character (if necessary)
   socket.emit("join", { room: currentArea, character });
+  // cleanup function for useEffect
   return () => {
+    dispatch({ type: "empty_messages" });
     socket.emit("leave", { room: currentArea, character });
     socket.removeAllListeners("character");
     socket.removeAllListeners("message");
@@ -43,7 +46,7 @@ export default function Home() {
   }, [currentArea]);
 
   useEffect(() => {
-    return setupSocket({ socket, currentArea, character });
+    return setupSocket({ socket, currentArea, character, dispatch });
   }, [currentArea]);
 
   useEffect(() => {

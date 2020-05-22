@@ -5,6 +5,7 @@ import { store } from "../store";
 import { getArea } from "../lib/areas";
 import ReactPlayer from "react-player";
 import socket from "../lib/socket";
+import CharacterSetup from "../components/character_setup";
 
 function areaEffects({ area, dispatch }) {
   const effects = area.effects || [];
@@ -61,7 +62,9 @@ export default function Home() {
     ? area.mainContent({ state, dispatch })
     : null;
 
-  return (
+  const usernameSet = character.username && character.username !== "";
+
+  return usernameSet ? (
     <Layout>
       {mainContent}
       {/* <h1> */}
@@ -70,5 +73,7 @@ export default function Home() {
       {/* <div id="twitch"></div> */}
       {/* {stream && <ReactPlayer controls url={stream} playing />} */}
     </Layout>
+  ) : (
+    <CharacterSetup />
   );
 }

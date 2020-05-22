@@ -3,7 +3,7 @@ import React, { createContext, useReducer } from "react";
 const defaultState = {
   currentArea: "entry",
   character: {
-    username: "jacke",
+    username: "",
     stamina: 100,
   },
   messages: [],

@@ -5,7 +5,7 @@ import { StateProvider } from "../store";
 export default function App({ Component, pageProps }) {
   return (
     <StateProvider>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </StateProvider>
   );
 }

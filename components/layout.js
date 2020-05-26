@@ -33,7 +33,7 @@ export default function Layout({ children }) {
 
         <section id="characterSection">
           <div id="character">
-            <img id="characterImage" src="/img/character1.gif" />
+            <img id="characterImage" src={`/img/character_imgs/${state.character.img}`} />
             <p id="characterName">{state.character.username}</p>
           </div>
           <div id="characterStats">

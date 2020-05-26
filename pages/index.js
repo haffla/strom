@@ -35,34 +35,47 @@ function setupSocket({ socket, currentArea, character, dispatch }) {
   };
 }
 
-export default function Home() {
+export async function getStaticProps() {
+  return {
+    props: {
+      imgs: ["character1.gif"]
+    },
+  };
+}
+
+export default function Home(props) {
   const { state, dispatch } = useContext(store);
   const { currentArea, character } = state;
   const area = getArea(currentArea);
   // const stream = area.streams ? area.streams[0].url : null;
   const stream = null;
+  const usernameSet = character.username && character.username !== "";
 
   useEffect(() => {
-    return areaEffects({ area, dispatch });
-  }, [currentArea]);
+    if (usernameSet) {
+      return areaEffects({ area, dispatch });
+    }
+  }, [currentArea, usernameSet]);
 
   useEffect(() => {
-    return setupSocket({ socket, currentArea, character, dispatch });
-  }, [currentArea]);
+    if (usernameSet) {
+      return setupSocket({ socket, currentArea, character, dispatch });
+    }
+  }, [currentArea, usernameSet]);
 
   useEffect(() => {
     dispatch({ type: "persist_state" });
   });
 
   useEffect(() => {
-    socket.emit("character", character);
-  }, [character]);
+    if (usernameSet) {
+      socket.emit("character", character);
+    }
+  }, [character, usernameSet]);
 
   const mainContent = area.mainContent
     ? area.mainContent({ state, dispatch })
     : null;
-
-  const usernameSet = character.username && character.username !== "";
 
   return usernameSet ? (
     <Layout>
@@ -74,6 +87,6 @@ export default function Home() {
       {/* {stream && <ReactPlayer controls url={stream} playing />} */}
     </Layout>
   ) : (
-    <CharacterSetup />
+    <CharacterSetup imgs={props.imgs} />
   );
 }

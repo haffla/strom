@@ -4,6 +4,7 @@ const defaultState = {
   currentArea: "entry",
   character: {
     username: "",
+    img: "",
     stamina: 100,
   },
   messages: [],
